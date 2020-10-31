@@ -26,7 +26,6 @@ func main() {
 		if !db.IsNewProperty(property) || !idealista.IsValidBasicProperty(property, *cfg) {
 			continue
 		}
-		fmt.Println("extra call")
 		propertyDetails := client.GetProperty(property.PropertyCode)
 		if idealista.IsValidDetailedProperty(propertyDetails, *cfg) {
 			err := t.SendMessage(cfg.TelegramChannel, property.URL)
