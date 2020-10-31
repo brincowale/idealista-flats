@@ -1,0 +1,23 @@
+{
+  "database": "user:pass@tcp(host:3306)/db?loc=Europe%2FMadrid",
+  "sentry": "https://nnnnnyyyyy@o123456.ingest.sentry.io/123456789",
+  "telegram": {
+    "api_key": "0123456:ABCD-nnnnn",
+    "channel_id": "@myChannel"
+  },
+  "search": "maxItems=40&locationName=Madrid&locationId=0-EU-ES-28-07-001-079&sort=desc&sinceDate=T&numPage=1%2C1&minPrice=500.0&propertyType=homes&maxPrice=900.0&operation=rent&floorHeights=intermediateFloor%2CtopFloor&bedrooms=0%2C1%2C2%2C3",
+  "filters": {
+    "not_valid_sentences": [
+      "11 meses",
+      "PISOS DE TEMPORADA"
+    ],
+    "minimum_pictures": 5,
+    "show_only_agencies": true,
+    "not_valid_neighborhoods": ["sol"],
+    "not_valid_floors": [
+      "planta 1ª",
+      "entresuelo",
+      "entreplanta"
+    ]
+  }
+}
