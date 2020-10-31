@@ -1,7 +1,7 @@
 package database
 
 import (
-	"fmt"
+	"github.com/getsentry/sentry-go"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"idealista-flats/idealista"
@@ -14,7 +14,7 @@ type DB struct {
 func New(dsn string) *DB {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		fmt.Println(err)
+		sentry.CaptureException(err)
 	}
 	return &DB{
 		conn: db,

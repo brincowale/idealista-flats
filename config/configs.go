@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"github.com/getsentry/sentry-go"
 	"github.com/spf13/viper"
 )
 
@@ -23,6 +24,7 @@ func LoadConfigs() *Config {
 	viper.AddConfigPath(".")
 	err := viper.ReadInConfig()
 	if err != nil {
+		sentry.CaptureException(err)
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
 	return &Config{

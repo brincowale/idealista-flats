@@ -1,7 +1,7 @@
 package idealista
 
 import (
-	"fmt"
+	"github.com/getsentry/sentry-go"
 	"github.com/go-resty/resty"
 )
 
@@ -25,7 +25,7 @@ func (c Idealista) GetToken() string {
 		SetResult(&login).
 		Post("https://secure.idealista.com/api/oauth/token")
 	if err != nil {
-		fmt.Println(nil)
+		sentry.CaptureException(err)
 	}
 	return login.AccessToken
 }
@@ -39,7 +39,7 @@ func (c Idealista) GetProperties(search string) *Results {
 		SetResult(&properties).
 		Post("https://secure.idealista.com/api/3.5/es/search?k=5b85c03c16bbb85d96e232b112ee85dc")
 	if err != nil {
-		fmt.Println(nil)
+		sentry.CaptureException(err)
 	}
 	return properties
 }
@@ -50,7 +50,7 @@ func (c Idealista) GetProperty(propertyId string) PropertyDetails {
 		SetResult(&property).
 		Get("https://secure.idealista.com/api/3/es/detail/" + propertyId + "?k=5b85c03c16bbb85d96e232b112ee85dc")
 	if err != nil {
-		fmt.Println(nil)
+		sentry.CaptureException(err)
 	}
 	return property
 }

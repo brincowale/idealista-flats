@@ -31,7 +31,7 @@ func main() {
 		if idealista.IsValidDetailedProperty(propertyDetails, *cfg) {
 			err := t.SendMessage(cfg.TelegramChannel, property.URL)
 			if err != nil {
-				fmt.Println(err)
+				sentry.CaptureException(err)
 			} else {
 				db.AddProperty(property)
 			}

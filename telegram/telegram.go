@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"github.com/getsentry/sentry-go"
 	"github.com/hashicorp/go-retryablehttp"
-	"github.com/labstack/gommon/log"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -58,17 +58,17 @@ func (c Client) SendMessage(chatId string, message string) error {
 		},
 	)
 	if err != nil {
-		log.Error(err)
+		sentry.CaptureException(err)
 	}
 	endpoint := "https://api.telegram.org/bot" + c.Token + "/sendMessage"
 	req, err := http.NewRequest("POST", endpoint, bytes.NewBuffer(data))
 	if err != nil {
-		log.Error(err)
+		sentry.CaptureException(err)
 	}
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := c.Request.Do(req)
 	if err != nil {
-		log.Error(err)
+		sentry.CaptureException(err)
 	}
 	defer resp.Body.Close()
 	var response TelegramResponse
