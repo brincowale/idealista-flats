@@ -9,9 +9,6 @@ func IsValidBasicProperty(property Property, cfg config.Config) bool {
 	if !IsValidPicturesNumber(property.NumPhotos, cfg.MinimumPictures) {
 		return false
 	}
-	if !IsValidRoomsNumber(property.Rooms, cfg.MaximumRooms) {
-		return false
-	}
 	if !IsValidNeighborhood(property.Neighborhood, cfg.NotValidNeighborhoods) {
 		return false
 	}
@@ -33,13 +30,6 @@ func IsValidDetailedProperty(propertyDetails PropertyDetails, cfg config.Config)
 
 func IsValidPicturesNumber(pictures int, min int) bool {
 	if pictures >= min {
-		return true
-	}
-	return false
-}
-
-func IsValidRoomsNumber(rooms int, max int) bool {
-	if rooms <= max {
 		return true
 	}
 	return false
