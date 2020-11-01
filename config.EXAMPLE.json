@@ -18,6 +18,9 @@
       "planta 1ª",
       "entresuelo",
       "entreplanta"
+    ],
+    "not_valid_agencies": [
+      "SQM03"
     ]
   }
 }

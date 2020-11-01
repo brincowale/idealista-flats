@@ -1,6 +1,7 @@
 package idealista
 
 import (
+	"fmt"
 	"idealista-flats/config"
 	"strings"
 )
@@ -20,6 +21,9 @@ func IsValidDetailedProperty(propertyDetails PropertyDetails, cfg config.Config)
 		return false
 	}
 	if cfg.ShowOnlyAgency && !IsAgency(propertyDetails.ContactInfo.Professional) {
+		return false
+	}
+	if !IsValidAgency(propertyDetails.ContactInfo.CommercialName, cfg.NotValidAgencies) {
 		return false
 	}
 	if !IsValidDescription(propertyDetails.PropertyComment, cfg.NotValidSentences) {
@@ -64,4 +68,15 @@ func IsValidFloor(floor string, notValidFloors []string) bool {
 
 func IsAgency(isAgency bool) bool {
 	return isAgency
+}
+
+func IsValidAgency(agency string, notValidAgencies []string) bool {
+	for _, notValidAgency := range notValidAgencies {
+		if strings.ToLower(agency) == strings.ToLower(notValidAgency) {
+			fmt.Println("agencia caca")
+			fmt.Println(agency)
+			return false
+		}
+	}
+	return true
 }

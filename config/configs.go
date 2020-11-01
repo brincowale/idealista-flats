@@ -17,6 +17,7 @@ type Config struct {
 	Database              string
 	ShowOnlyAgency        bool
 	NotValidFloors        []string
+	NotValidAgencies      []string
 }
 
 func LoadConfigs() *Config {
@@ -38,5 +39,6 @@ func LoadConfigs() *Config {
 		NotValidFloors:        viper.GetStringSlice("filters.not_valid_floors"),
 		Database:              viper.GetString("database"),
 		ShowOnlyAgency:        viper.GetBool("filters.show_only_agencies"),
+		NotValidAgencies:      viper.GetStringSlice("filters.not_valid_agencies"),
 	}
 }
