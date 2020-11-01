@@ -73,8 +73,6 @@ func IsAgency(isAgency bool) bool {
 func IsValidAgency(agency string, notValidAgencies []string) bool {
 	for _, notValidAgency := range notValidAgencies {
 		if strings.ToLower(agency) == strings.ToLower(notValidAgency) {
-			fmt.Println("agencia caca")
-			fmt.Println(agency)
 			return false
 		}
 	}
