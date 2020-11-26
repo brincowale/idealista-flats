@@ -23,7 +23,7 @@ func main() {
 	client.Token = client.GetToken()
 	results := client.GetProperties(cfg.Search)
 	for _, property := range results.Properties {
-		if !db.IsNewProperty(property) || !idealista.IsValidBasicProperty(property, *cfg) {
+		if !idealista.IsValidBasicProperty(property, *cfg) || !db.IsNewProperty(property) {
 			continue
 		}
 		propertyDetails := client.GetProperty(property.PropertyCode)

@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"github.com/getsentry/sentry-go"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -22,11 +23,14 @@ func New(dsn string) *DB {
 }
 
 func (db DB) AddProperty(property idealista.Property) {
-	db.conn.Select("id").Create(property)
+	db.conn.Select("id").Create(idealista.Property{
+		PropertyCode: fmt.Sprintf("%s_%.0f_%.0f", property.SuggestedTexts.Title, property.Size, property.Price),
+	})
 }
 
 func (db DB) IsNewProperty(property idealista.Property) bool {
 	var p idealista.Property
-	db.conn.First(&p, property.PropertyCode)
+	customId := fmt.Sprintf("%s_%.0f_%.0f", property.SuggestedTexts.Title, property.Size, property.Price)
+	db.conn.Where("id = ?", customId).First(&p)
 	return p.PropertyCode == ""
 }

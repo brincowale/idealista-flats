@@ -21,9 +21,12 @@ func (c Idealista) GetToken() string {
 	_, err := c.client.R().
 		SetHeader("Authorization", "Basic NWI4NWMwM2MxNmJiYjg1ZDk2ZTIzMmIxMTJlZTg1ZGM6aWRlYSUzQmFuZHIwMWQ=").
 		SetHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8").
+		SetHeader("app_version", "9.2.4").
+		SetHeader("device_identifier", "b0a322ed171bb65f").
+		SetHeader("User-Agent", "Dalvik/2.1.0 (Linux; U; Android 10; Samsung S10 Build/KPL4.15482.053)").
 		SetBody(`grant_type=client_credentials&scope=write`).
-		SetResult(&login).
-		Post("https://secure.idealista.com/api/oauth/token")
+			SetResult(&login).
+			Post("https://secure.idealista.com/api/oauth/token")
 	if err != nil {
 		sentry.CaptureException(err)
 	}
@@ -33,7 +36,7 @@ func (c Idealista) GetToken() string {
 func (c Idealista) GetProperties(search string) *Results {
 	var properties *Results
 	_, err := c.client.R().
-		SetHeader("Authorization", "Bearer " + c.Token).
+		SetHeader("Authorization", "Bearer "+c.Token).
 		SetHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8").
 		SetBody(search).
 		SetResult(&properties).
