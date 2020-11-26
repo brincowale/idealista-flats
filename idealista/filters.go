@@ -1,7 +1,6 @@
 package idealista
 
 import (
-	"fmt"
 	"idealista-flats/config"
 	"strings"
 )
