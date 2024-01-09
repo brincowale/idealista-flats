@@ -1,0 +1,18 @@
+{
+  "telegram": {
+    "api_key": "TELEGRAM_TOKEN",
+    "channel_id": "-TELEGRAM_CHANNEL"
+  },
+  "url": "https://www.idealista.com/areas/venta-viviendas/con-precio-hasta_500000,precio-desde_100000,metros-cuadrados-mas-de_40,metros-cuadrados-menos-de_120,de-un-dormitorio,de-dos-dormitorios,de-tres-dormitorios,un-bano,dos-banos,ascensor,ultimas-plantas,plantas-intermedias/pagina-1?shape=LOCATION-AREA&ordenado-por=fecha-publicacion-desc",
+  "filters": {
+    "not_valid_sentences": [
+      "sin cedula",
+      "ideal inversores"
+    ],
+    "not_valid_neighborhoods": [
+      "raval",
+      "barceloneta"
+    ]
+  },
+  "delay_between_requests": 10
+}
