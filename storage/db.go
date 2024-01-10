@@ -1,64 +1,67 @@
 package storage
 
 import (
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
+	"database/sql"
 	"idealista-flats/idealista"
+	"log"
+	_ "modernc.org/sqlite"
 	"time"
 )
 
-var DB *gorm.DB
+var DB *sql.DB
 
 func init() {
 	var err error
-	DB, err = gorm.Open(sqlite.Open("flats.db"), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
-	})
+	DB, err = sql.Open("sqlite", "flats.db")
 	if err != nil {
-		panic("failed to connect database")
+		log.Fatal(err)
 	}
-	DB.AutoMigrate(&Property{})
-}
-
-type Property struct {
-	Id            string `gorm:"primaryKey"`
-	Title         string
-	URL           string
-	Price         string
-	Description   string
-	M2            string
-	Neighbourhood string
-	FirstDateSeen time.Time
-	LastDateSeen  time.Time
+	_, err = DB.Exec(`CREATE TABLE IF NOT EXISTS properties (
+		id TEXT PRIMARY KEY,
+		title TEXT,
+		url TEXT,
+		price TEXT,
+		description TEXT,
+		m2 TEXT,
+		neighbourhood TEXT,
+		first_date_seen DATETIME,
+		last_date_seen DATETIME
+	);`)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func InsertProperty(propertyIdealista *idealista.Property) bool {
-	dbProperty := Property{
-		Id:            propertyIdealista.Id,
-		Title:         propertyIdealista.Title,
-		URL:           propertyIdealista.URL,
-		Price:         propertyIdealista.Price,
-		Description:   propertyIdealista.Description,
-		M2:            propertyIdealista.M2,
-		Neighbourhood: propertyIdealista.Neighbourhood,
+	query := `
+		INSERT OR REPLACE INTO properties (
+			id, title, url, price, description, m2, neighbourhood, first_date_seen, last_date_seen
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+	`
+	_, err := DB.Exec(query,
+		propertyIdealista.Id,
+		propertyIdealista.Title,
+		propertyIdealista.URL,
+		propertyIdealista.Price,
+		propertyIdealista.Description,
+		propertyIdealista.M2,
+		propertyIdealista.Neighbourhood,
+		time.Now(),
+		time.Now(),
+	)
+	if err != nil {
+		log.Println("Error inserting property:", err)
+		return false
 	}
-	if IsNewProperty(propertyIdealista) {
-		dbProperty.FirstDateSeen = time.Now()
-		dbProperty.LastDateSeen = time.Now()
-	} else {
-		dbProperty.LastDateSeen = time.Now()
-		existingProperty := Property{}
-		DB.First(&existingProperty, "id = ?", propertyIdealista.Id)
-		dbProperty.FirstDateSeen = existingProperty.FirstDateSeen
-	}
-	err := DB.Save(&dbProperty)
-	return err.Error == nil
+	return true
 }
 
 func IsNewProperty(propertyIdealista *idealista.Property) bool {
-	dbProperty := Property{
-		Id: propertyIdealista.Id,
+	var count int
+	row := DB.QueryRow("SELECT COUNT(*) FROM properties WHERE id = ?", propertyIdealista.Id)
+	if err := row.Scan(&count); err != nil {
+		log.Println("Error checking if property exists:", err)
+		return false
 	}
-	return DB.First(&dbProperty, "id = ?", propertyIdealista.Id).Error != nil
+	return count == 0
 }
